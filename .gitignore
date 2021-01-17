@@ -3,3 +3,7 @@ Logs/
 .vsconfig
 Temp/
 UserSettings/
+.vs/
+UnityTinyLab.sln
+Assembly-CSharp.csproj
+obj/

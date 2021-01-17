@@ -1,27 +1,18 @@
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-Shader "UnityTinyLab/3DOutline"
+Shader "UnityTinyLab/3DOutline1"
 {
 
 	Properties
 	{
 		_MainTex("Base 2D", 2D) = "white"{}
-		_XRayColor("XRay Color", Color) = (1,1,1,1)
 	}
  
 	SubShader
 	{
-		Tags{ "Queue" = "Geometry+100" "RenderType" = "Opaque" }
+		Tags{ "Queue" = "Geometry" "RenderType" = "Opaque" }
 		
-		//渲染X光效果的Pass
+		//Render the covered part
 		Pass
 		{
 			Blend SrcAlpha One
@@ -30,36 +21,29 @@ Shader "UnityTinyLab/3DOutline"
  
 			CGPROGRAM
 			#include "Lighting.cginc"
-			fixed4 _XRayColor;
 			struct v2f
 			{
 				float4 pos : SV_POSITION;
-				float3 normal : normal;
-				float3 viewDir : TEXCOORD0;
 			};
  
 			v2f vert (appdata_base v)
 			{
 				v2f o;
 				o.pos = UnityObjectToClipPos(v.vertex);
-				o.viewDir = ObjSpaceViewDir(v.vertex);
-				o.normal = v.normal;
 				return o;
 			}
  
 			fixed4 frag(v2f i) : SV_Target
 			{
-				float3 normal = normalize(i.normal);
-				float3 viewDir = normalize(i.viewDir);
-				float rim = 1 - dot(normal, viewDir);
-				return _XRayColor * rim;
+				return fixed4(1, 1, 1, 0.5);
 			}
+
 			#pragma vertex vert
 			#pragma fragment frag
 			ENDCG
 		}
 		
-		//正常渲染的Pass
+		//General part
 		Pass
 		{
 			ZWrite On
@@ -71,7 +55,7 @@ Shader "UnityTinyLab/3DOutline"
 			struct v2f
 			{
 				float4 pos : SV_POSITION;
-				float2 uv : TEXCOORD0;
+				float2 uv : TEXCOORD1;
 			};
  
 			v2f vert(appdata_base v)
@@ -94,5 +78,4 @@ Shader "UnityTinyLab/3DOutline"
 	}
 	
 	FallBack "Diffuse"
-
 }
