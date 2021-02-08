@@ -7,3 +7,5 @@ UserSettings/
 UnityTinyLab.sln
 Assembly-CSharp.csproj
 obj/
+Assembly-CSharp-Editor.csproj
+UIElementsSchema/
