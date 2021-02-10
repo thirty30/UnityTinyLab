@@ -5,6 +5,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using UnityEditor.Callbacks;
 
 public class TGraphWindow : EditorWindow
 {
@@ -15,6 +16,20 @@ public class TGraphWindow : EditorWindow
     {
         var window = GetWindow<TGraphWindow>();
         window.titleContent = new GUIContent("TGraph Window");
+    }
+
+    //open the object by double click or open button
+    [OnOpenAssetAttribute(0)]
+    public static bool OpenTGraphObject(int instanceID, int line)
+    {
+        Object obj = EditorUtility.InstanceIDToObject(instanceID);
+        if (obj.GetType() != typeof(TGraphData))
+        {
+            return false;
+        }
+        var window = GetWindow<TGraphWindow>();
+        window.titleContent = new GUIContent("TGraph Window");
+        return true;
     }
 
     private void OnEnable()
